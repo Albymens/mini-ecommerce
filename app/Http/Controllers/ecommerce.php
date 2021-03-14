@@ -23,8 +23,14 @@ class ecommerce extends Controller
         return view('create-items');
     }
 
-    public function show(){
+    public function show($id){
+        $items = Item::find($id);
 
+        return view('/each-item', [
+            'items' => $items
+        ]);
+
+      
     }
 
     public function store(){
@@ -39,11 +45,24 @@ class ecommerce extends Controller
         return response()->json($items, 201);
     }
 
-    public function update(){
-
+    public function update(Request $request, $id){
+        $items = Item::findorfail($id);
+        $items->update($request->all());
+        
+        return redirect('/items', [
+            'items' => $items
+        ]);
     }
 
-    public function destroy(){
+    public function edit(){
+    
+        return view('update');
+    }
 
+    public function destroy($id){
+        $items = Item::findorfail($id);
+        $items->delete();
+        
+        return redirect('/items');
     }
 }
